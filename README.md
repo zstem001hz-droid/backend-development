@@ -60,6 +60,9 @@ backend-development/
 
 ## References
 
+- [Mongoose Population](https://mongoosejs.com/docs/populate.html)
+- [Mongoose SchemaTypes](https://mongoosejs.com/docs/schematypes.html)
+
 ## Reflection
 
 > 🚧 Work in progress
