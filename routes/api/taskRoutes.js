@@ -102,3 +102,39 @@ router.put("/tasks/:taskId", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// DELETE /api/tasks/:taskId - Delete a single task
+router.delete("/tasks/:taskId", async (req, res) => {
+  try {
+    // Find task by ID
+    const task = await Task.findById(req.params.taskId);
+
+    if (!task) {
+      return res.status(404).json({ message: "No task found with this id!" });
+    }
+
+    // Find parent project to check ownership
+    const project = await Project.findById(task.project);
+
+    if (!project) {
+      return res
+        .status(404)
+        .json({ message: "No project found for this task!" });
+    }
+
+    // Check ownership of parent project
+    if (project.user.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "User is not authorized to delete this task." });
+    }
+
+    // Delete the task
+    await Task.findByIdAndDelete(req.params.taskId);
+    res.json({ message: "Task deleted!" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;
