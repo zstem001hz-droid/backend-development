@@ -30,3 +30,24 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// GET /api/projects/:id - Get a single project by ID
+router.get("/:id", async (req, res) => {
+  try {
+    // Find project by ID
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({ message: "No project found with this id!" });
+    }
+
+    // Check ownership before returning
+    if (project.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "User is not authorized to view this project." });
+    }
+
+    res.json(project);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
