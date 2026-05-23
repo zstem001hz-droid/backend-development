@@ -51,16 +51,53 @@ router.get("/projects/:projectId/tasks", async (req, res) => {
 
     // Check ownership of parent project
     if (project.user.toString() !== req.user._id.toString()) {
-      return res
-        .status(403)
-        .json({
-          message: "User is not authorized to view tasks for this project.",
-        });
+      return res.status(403).json({
+        message: "User is not authorized to view tasks for this project.",
+      });
     }
 
     // Get all tasks for the project
     const tasks = await Task.find({ project: req.params.projectId });
     res.json(tasks);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// PUT /api/tasks/:taskId - Update a single task
+router.put("/tasks/:taskId", async (req, res) => {
+  try {
+    // Find task by ID
+    const task = await Task.findById(req.params.taskId);
+
+    if (!task) {
+      return res.status(404).json({ message: "No task found with this id!" });
+    }
+
+    // Find parent project to check ownership
+    const project = await Project.findById(task.project);
+
+    if (!project) {
+      return res
+        .status(404)
+        .json({ message: "No project found for this task!" });
+    }
+
+    // Check ownership of parent project
+    if (project.user.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "User is not authorized to update this task." });
+    }
+
+    // Update the task
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.taskId,
+      req.body,
+      { new: true },
+    );
+
+    res.json(updatedTask);
   } catch (err) {
     res.status(500).json(err);
   }
