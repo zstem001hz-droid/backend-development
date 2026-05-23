@@ -12,6 +12,32 @@ A secure RESTful API built for TaskMaster, a productivity platform managing user
 
 ## Project Structure
 
+```
+backend-development/
+├── config/
+│   └── connection.js
+├── models/
+│   ├── index.js
+│   ├── Project.js
+│   ├── Task.js
+│   └── User.js
+├── routes/
+│   ├── api/
+│   │   ├── index.js
+│   │   ├── projectRoutes.js
+│   │   ├── taskRoutes.js
+│   │   └── userRoutes.js
+│   └── index.js
+├── utils/
+│   └── auth.js
+├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+├── server.js
+└── README.md
+```
+
 ## Getting Started
 
 ### Prerequisites
