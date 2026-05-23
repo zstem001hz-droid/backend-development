@@ -19,3 +19,14 @@ router.post("/", async (req, res) => {
     res.status(400).json(err);
   }
 });
+
+// GET /api/projects - Get all projects for logged-in user
+router.get("/", async (req, res) => {
+  try {
+    // Only return projects owned by the logged-in user
+    const projects = await Project.find({ user: req.user._id });
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
