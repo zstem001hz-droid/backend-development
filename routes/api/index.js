@@ -7,6 +7,8 @@ const taskRoutes = require("./taskRoutes");
 // Mount user, project, and task routes
 router.use("/users", userRoutes);
 router.use("/projects", projectRoutes);
-router.use("/tasks", taskRoutes);
+
+// Mount task routes at root — handles both nested and standalone task routes
+router.use("/", taskRoutes);
 
 module.exports = router;
