@@ -30,3 +30,12 @@ userSchema.pre("save", async function () {
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
 });
+
+// Instance method to verify password on login
+userSchema.methods.isCorrectPassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
+const User = model("User", userSchema);
+
+module.exports = User;
