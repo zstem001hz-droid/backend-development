@@ -64,6 +64,8 @@ backend-development/
 - [Mongoose SchemaTypes](https://mongoosejs.com/docs/schematypes.html)
 - [Mongoose SchemaTypes — enum](https://mongoosejs.com/docs/schematypes.html#string-validators)
 - [jsonwebtoken on npm](https://www.npmjs.com/package/jsonwebtoken)
+- [RESTful API Design — Nested Resources](https://www.moesif.com/blog/technical/api-design REST-API-Design-Best-Practices-for-Sub-and-Nested-Resources/)
+- [Express.js — Route Parameters](https://expressjs.com/en/guide/routing.html#route-parameters)
 
 ## Reflection
 
