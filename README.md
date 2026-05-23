@@ -62,6 +62,7 @@ backend-development/
 
 - [Mongoose Population](https://mongoosejs.com/docs/populate.html)
 - [Mongoose SchemaTypes](https://mongoosejs.com/docs/schematypes.html)
+- [Mongoose SchemaTypes — enum](https://mongoosejs.com/docs/schematypes.html#string-validators)
 
 ## Reflection
 
