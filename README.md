@@ -1,4 +1,4 @@
-# Backend Development — TaskMaster API
+# 🔐 Backend Development — TaskMaster API
 
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green)
 ![Express](https://img.shields.io/badge/Express-5.x-lightgrey)
@@ -47,10 +47,10 @@ backend-development/
 
 ## Data Model Relationships
 
-\```
+```
 User (1) ──────── (_) Project (1) ──────── (_) Task
 owns contains
-\```
+```
 
 - A `User` owns many `Projects`
 - A `Project` contains many `Tasks`
@@ -135,10 +135,9 @@ owns contains
 5. Access granted or `403 Forbidden` returned based on parent project ownership
 
 ## Task Authorization Chain
-
-\```
+```
 Request → authMiddleware → Find Task → Find Parent Project → Check project.user === req.user.\_id → ✅ or 403
-\```
+```
 
 No other route pattern in this project requires this traversal. Tasks don't reference users directly — ownership is always verified through the parent project.
 
@@ -287,4 +286,12 @@ All endpoints tested using Postman. Test coverage includes:
 
 ## Reflection
 
-> 🚧 Work in progress
+The TaskMaster API is an architecturally complex backend project that pushed the boundaries of what a RESTful API can do with thoughtful data modeling and layered security. Bringing together three interconnected models, nested routing, and multi-layered authorization into a single cohesive API required careful planning at every phase — from schema design to route security.
+
+The most technically demanding aspect was the task authorization chain. Unlike projects, tasks don't reference users directly — ownership must be verified by traversing from the task to its parent project and then checking the project's owner against the authenticated user. This two-step lookup — `task.project → project.user → req.user._id` — is a pattern that emerges naturally from sound relational data modeling. Understanding why this traversal is necessary, rather than just implementing it, was the real learning moment.
+
+Nested routing also introduced new complexity. Flat routes are straightforward, but `POST /api/projects/:projectId/tasks` required understanding how Express handles route parameters across nested resources. Mounting the task router at the root level rather than under `/tasks` was a deliberate architectural decision that kept the URL structure RESTful and semantically correct.
+
+Several bugs were caught during testing that reinforced the importance of thorough API testing before submission. Typos in property names — `emai` instead of `email`, `eq.body` instead of `req.body`, `date` instead of `data` — caused silent failures that only surfaced through careful Postman testing and terminal logging. Each fix was committed independently, creating an honest and traceable git history.
+
+From an IAM and DevSecOps perspective, this project demonstrates that authorization is never a single check — it is a chain of verification steps that must account for resource ownership at every level. A user authenticated with a valid JWT still cannot access resources they don't own. A valid token proves identity. Ownership proves permission. Both are required, and neither is sufficient alone. That principle, applied consistently across every route in this API, is the foundation of any secure backend system.
