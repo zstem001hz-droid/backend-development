@@ -79,7 +79,7 @@ router.put("/:id", async (req, res) => {
     const updatedProject = await Project.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true },
+      { returnDocument: "after" },
     );
 
     res.json(updatedProject);
@@ -116,3 +116,4 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
+q

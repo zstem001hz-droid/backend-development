@@ -93,8 +93,8 @@ router.put("/tasks/:taskId", async (req, res) => {
     // Update the task
     const updatedTask = await Task.findByIdAndUpdate(
       req.params.taskId,
-      req.body,
-      { new: true },
+      eq.body,
+      { returnDocument: "after" },
     );
 
     res.json(updatedTask);
