@@ -45,6 +45,18 @@ backend-development/
 └── README.md
 ```
 
+## Data Model Relationships
+
+\```
+User (1) ──────── (_) Project (1) ──────── (_) Task
+owns contains
+\```
+
+- A `User` owns many `Projects`
+- A `Project` contains many `Tasks`
+- A `Task` belongs to one `Project`
+- Authorization always traces back to the `User` through this chain
+
 ## Getting Started
 
 ### Prerequisites
@@ -122,6 +134,14 @@ backend-development/
 4. Compares `project.user.toString()` against `req.user._id.toString()`
 5. Access granted or `403 Forbidden` returned based on parent project ownership
 
+## Task Authorization Chain
+
+\```
+Request → authMiddleware → Find Task → Find Parent Project → Check project.user === req.user.\_id → ✅ or 403
+\```
+
+No other route pattern in this project requires this traversal. Tasks don't reference users directly — ownership is always verified through the parent project.
+
 ## Security Features
 
 - Passwords hashed and salted using bcrypt with 10 salt rounds
@@ -149,6 +169,16 @@ backend-development/
 | 403         | User is not authorized to delete this task.            | Wrong user token          |
 | 404         | No project found with this id!                         | Project doesn't exist     |
 | 404         | No task found with this id!                            | Task doesn't exist        |
+
+## Testing
+
+All endpoints tested using Postman. Test coverage includes:
+
+- User registration and login
+- Full CRUD on projects with ownership verification
+- Full CRUD on tasks with parent project ownership verification
+- Authorization rejection — wrong user returns `403` on all protected routes
+- Unauthenticated rejection — missing token returns `401` on all protected routes
 
 ## Usage Examples
 
@@ -222,6 +252,14 @@ backend-development/
   "project": "..."
 }
 ```
+
+### Task Status Values
+
+| Status        | Description                      |
+| ------------- | -------------------------------- |
+| `To Do`       | Task has not been started        |
+| `In Progress` | Task is actively being worked on |
+| `Done`        | Task has been completed          |
 
 ### Unauthorized Access
 
